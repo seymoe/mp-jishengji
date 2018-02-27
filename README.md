@@ -4,24 +4,26 @@
 
 状态：未完成
 
-计划
-
-<img style="display:block;margin-bottom: 15px" width="375" src="https://github.com/ximolang/mp-jishengji/raw/master/readme_img/plan.png"/>
-
-账本
-
-<img style="display:block;margin-bottom: 15px" width="375" src="https://github.com/ximolang/mp-jishengji/raw/master/readme_img/bill.png"/>
-
-我的
-
-<img width="375" src="https://github.com/ximolang/mp-jishengji/raw/master/readme_img/me.png"/>
-
 ## 玩耍：
 
 1. Fork 或 `git clone https://github.com/ximolang/mp-jishengji.git` 或 download
 2. `cd mp-jishengji && npm install`
 3. `wepy build --watch` (如果为安装wepy-cli,请先安装,见[WePY](https://tencent.github.io/wepy/index.html))
 4. 微信开发者工具目录选择dist
+
+---
+
++ 计划
+
+<img style="display:block;margin-bottom: 15px" width="375" src="https://github.com/ximolang/mp-jishengji/raw/master/readme_img/plan.png"/>
+
++ 账本
+
+<img style="display:block;margin-bottom: 15px" width="375" src="https://github.com/ximolang/mp-jishengji/raw/master/readme_img/bill.png"/>
+
++ 我的
+
+<img width="375" src="https://github.com/ximolang/mp-jishengji/raw/master/readme_img/me.png"/>
 
 ## 想法：
 
