@@ -1,0 +1,63 @@
+<template>
+  <view class="listsection">
+    <view class="header">
+      <view class="left">
+        <text>{{ item.info.date }}</text>
+        <text>{{ item.info.day }}</text>
+      </view>
+      <view class="right">
+        <text>收入：{{ item.info.totalIncome }}</text>
+        <text>支出：{{ item.info.totalPay }}</text>
+      </view>
+    </view>
+    <view class="body">
+      <repeat for="{{ item.list }}" key="index" index="index" item="obj">
+        <listitem :obj="obj"></listitem>
+      </repeat>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import ListItem from './listitem'
+  export default class ListSection extends wepy.component {
+    props = {
+      item: {
+        type: Object,
+        default: {}
+      }
+    }
+
+    components = {
+      listitem: ListItem
+    }
+  }
+</script>
+
+<style lang="less">
+  .listsection{
+    .header{
+      height: 60rpx;
+      padding: 0 30rpx;
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1rpx solid #f0f0f0;
+      >view{
+        display: flex;
+        justify-content: space-between;
+        text{
+          line-height: 60rpx;
+          color: #666;
+          font-size: 26rpx;
+        }
+      }
+      .left > text:first-child, .right > text:first-child {
+        margin-right: 20rpx;
+      }
+    }
+    .body{
+
+    }
+  }
+</style>

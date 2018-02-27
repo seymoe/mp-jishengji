@@ -1,0 +1,182 @@
+<template>
+  <view class="wrap">
+    <view class="toparea">
+      <view class="left">
+        <text>资产</text>
+        <text>{{ assets }} 币</text>
+      </view>
+      <view class="center">
+        <image src="{{ userInfo.avatarUrl }}"></image>
+        <text>{{ userInfo.nickName }}</text>
+        <text>{{ userInfo.country }}</text>
+      </view>
+      <view class="right">
+        <text>计划</text>
+        <text>{{ hours }} h</text>
+      </view>
+    </view>
+
+    <!-- 菜单列表 -->
+    <view class="menulist">
+      <view class="menuitem">
+        <view class="icon iconfont icon-plan"></view>
+        <text>计划统计</text>
+      </view>
+      <view class="menuitem">
+        <view class="icon iconfont icon-bill"></view>
+        <text>账本统计</text>
+      </view>
+      <view class="menuitem">
+        <view class="icon iconfont icon-setting"></view>
+        <text>设置</text>
+      </view>
+    </view>
+
+    <!-- 菜单列表 -->
+    <view class="menulist">
+      <view class="menuitem">
+        <view class="icon iconfont icon-menual"></view>
+        <text>使用手册</text>
+      </view>
+      <view class="menuitem">
+        <view class="icon iconfont icon-feed"></view>
+        <text>意见反馈</text>
+      </view>
+      <view class="menuitem">
+        <view class="icon iconfont icon-log"></view>
+        <text>更新日志</text>
+      </view>
+      <view class="menuitem">
+        <view class="icon iconfont icon-author"></view>
+        <text>关于作者</text>
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  export default class Me extends wepy.page {
+    config = {
+      navigationBarTitleText: '我的'
+    }
+
+    data = {
+      userInfo: {},
+      assets: 12330,
+      hours: 120
+    }
+
+    onLoad() {
+      let self = this
+      this.$parent.getUserInfo(function (userInfo) {
+        if (userInfo) {
+          self.userInfo = userInfo
+        }
+        self.$apply()
+      })
+    }
+  }
+</script>
+
+<style lang="less">
+  .toparea{
+    display: flex;
+    align-items: baseline;
+    text-align: center;
+    padding: 50rpx 0;
+    margin-bottom: 20rpx;
+    background-color: #138cff;
+    text{
+      display: block;
+      font-size: 26rpx;
+      color: #fff;
+    }
+  }
+  .left, .right{
+    width: 25%;
+    text:last-child{
+      margin-top: 10rpx;
+      font-size: 28rpx;
+      font-weight: bold;
+      color: #fff;
+    }
+  }
+  .center{
+    flex: 1;
+    image{
+      display: block;
+      width: 100rpx;
+      height: 100rpx;
+      margin: 0 auto 30rpx auto;
+      border-radius: 100%;
+      border: 1rpx solid #f8f8f8;
+    }
+    text:last-child{
+      margin-top: 10rpx;
+      font-size: 28rpx;
+      font-weight: bold;
+    }
+  }
+
+  .menulist{
+    margin-bottom: 20rpx;
+    background-color: #fff;
+    .menuitem{
+      display: flex;
+      padding: 30rpx;
+      transition: background-color 0.3s;
+      .icon{
+        margin-right: 20rpx;
+        width: 50rpx;
+        height: 50rpx;
+        text-align: center;
+      }
+      .icon::after{
+        font-family: "iconfont" !important;
+        font-size: 34rpx;
+        line-height: 50rpx;
+      }
+      text{
+        flex: 1;
+        display: block;
+        height: 50rpx;
+        line-height: 50rpx;
+        font-size: 26rpx;
+        color: #666;
+      }
+    }
+    .menuitem:active{
+      background-color: #f8f8f8;
+    }
+
+    .icon-plan::after{
+      content: "\e601";
+      color: #138cff;
+    }
+    .icon-bill::after{
+      content: "\e61c";
+      color: #138cff;
+    }
+    .icon-setting::after{
+      content: "\e62c";
+      color: #138cff;
+    }
+    .icon-menual::after{
+      content: "\e647";
+      color: #138cff;
+    }
+    .icon-feed::after{
+      content: "\e62f";
+      color: #138cff;
+    }
+    .icon-log::after{
+      content: "\e696";
+      color: #138cff;
+    }
+    .icon-author::after{
+      content: "\e614";
+      color: #138cff;
+    }
+  }
+</style>

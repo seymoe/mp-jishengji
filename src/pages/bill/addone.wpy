@@ -1,0 +1,114 @@
+<template>
+  <view class="wrap">
+    <view class="typewrap">
+      <view class="typebar">
+        <view class="{{ bill.typeId == 1 ? 'active' : '' }}" @tap="toggleType(1)">
+          <text>支出</text>
+        </view>
+        <view class="{{ bill.typeId == 2 ? 'active' : '' }}" @tap="toggleType(2)">
+          <text>收入</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 类别图标列表 -->
+    <view class="catewrap">
+      <cateslide :list="cateList"></cateslide>
+    </view>
+  </view>
+
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import CateSlide from '@/components/bill/cateslide'
+  // import { log, getSystem, formatTime } from '@/utils/util'
+
+  export default class AddOne extends wepy.page {
+    config = {
+      navigationBarTitleText: '记账'
+    }
+
+    data = {
+      cateList: [
+        {
+          cateId: 1,
+          catelabel: 'catering',
+          cateName: '餐饮'
+        },
+        {
+          cateId: 2,
+          catelabel: 'shopping',
+          cateName: '购物'
+        }
+      ],
+      bill: {
+        typeId: 1
+      }
+    }
+
+    components = {
+      cateslide: CateSlide
+    }
+
+    methods = {
+      toggleType(t) {
+        this.bill.typeId = t
+        this.$apply()
+      }
+    }
+
+    onLoad() {
+      // log('账单页面加载成功')
+      // 设置当前月份
+      // const _cdate = formatTime(new Date()).slice(0, 2)
+      // this.calenderArr = _cdate
+      // this.$apply()
+    }
+  }
+</script>
+
+<style lang="less">
+  .wrap{
+    position: relative;
+    height: 100%;
+    background-color: #fff;
+  }
+  .typewrap{
+    padding: 30rpx 0;
+  }
+  .typebar{
+    display: flex;
+    width: 50%;
+    margin: 0 auto;
+    height: 60rpx;
+    border-radius: 6rpx;
+    border: 1rpx solid #138cff;
+    box-sizing: border-box;
+    view{
+      width: 50%;
+      line-height: 60rpx;
+      text-align: center;
+      font-size: 28rpx;
+      background-color: #fff;
+      transition: background-color .3s;
+      text{
+        color: #138cff;
+      }
+    }
+    view:first-child{
+      border-top-left-radius: 6rpx;
+      border-bottom-left-radius: 6rpx;
+    }
+    view:last-child{
+      border-top-right-radius: 6rpx;
+      border-bottom-right-radius: 6rpx;
+    }
+    .active{
+      background-color: #138cff;
+      text{
+        color: #fff;
+      }
+    }
+  }
+</style>

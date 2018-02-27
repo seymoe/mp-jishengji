@@ -1,0 +1,63 @@
+<template>
+  <swiper indicator-dots="true">
+    <swiper-item>
+      <view class="box">
+        <repeat for="{{ list }}" key="index" index="index" item="item">
+          <view class="item">
+            <view class="icon icon-{{ item.catelabel }}"></view>
+            <text>{{ item.cateName }}</text>
+          </view>
+        </repeat>
+      </view>
+    </swiper-item>
+  </swiper>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  export default class CateSlide extends wepy.component {
+    props = {
+      list: {
+        type: Array,
+        default: []
+      }
+    }
+  }
+</script>
+
+<style lang="less">
+  .box{
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    box-sizing: border-box;
+    padding: 30rpx;
+    .item{
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      width: 10%;
+      text-align: center;
+      text{
+        font-size: 24rpx;
+        color: #333;
+      }
+    }
+  }
+  .icon{
+    margin: 0 auto 8rpx auto;
+    width: 50rpx;
+    height: 50rpx;
+    border-radius: 100%;
+    background-color: #f8f8f8;
+  }
+  .icon::after{
+    font-family: "iconfont" !important;
+    font-size: 36rpx;
+    line-height: 50rpx;
+  }
+  .icon-catering::after{
+    content: '\e600';
+    color: #333;
+  }
+</style>

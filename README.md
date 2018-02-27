@@ -4,6 +4,10 @@
 
 状态：未完成
 
+![](https://github.com/ximolang/mp-jishengji/raw/master/readme_img/plan.png)
+![](https://github.com/ximolang/mp-jishengji/raw/master/readme_img/bill.png)
+![](https://github.com/ximolang/mp-jishengji/raw/master/readme_img/me.png)
+
 ## 玩耍步骤：
 
 1. Fork 或 `git clone https://github.com/ximolang/mp-jishengji.git` 或 download

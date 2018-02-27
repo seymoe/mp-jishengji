@@ -1,0 +1,12 @@
+<template>
+  
+</template>
+
+<script>
+  import wepy from 'wepy'
+  export default class Ranking extends wepy.page {
+    config = {
+      navigationBarTitleText: '榜单'
+    }
+  }
+</script>

@@ -1,0 +1,78 @@
+<template>
+  <view class="wrap">
+    <swiper class="swiper">
+      <repeat for="{{ planList }}" key="index" index="index" item="item">
+        <swiper-item>
+          <listitem 
+            :id="item.id"
+            :image="item.image"
+            :title="item.title"
+            :remark="item.remark"
+            :createtime="item.create_time"
+            :hours="item.hours"
+            :times="item.times">
+          </listitem>
+        </swiper-item>
+      </repeat>
+    </swiper>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import ListItem from '@/components/plan/listitem'
+
+  export default class Plan extends wepy.page {
+    config = {
+      navigationBarTitleText: '计划'
+    }
+
+    data = {
+      planList: [
+        {
+          id: 1,
+          image: '/images/reading.png',
+          title: '阅读',
+          remark: '书籍并不是没有生命的东西，它包藏着一种生命的潜力，与作者同样地活跃。不仅如此，它还像一个宝瓶，把作者生机勃勃的智慧中最纯净的精华保存起来。',
+          create_time: '2018年2月24日',
+          times: 0,
+          hours: '5.22'
+        },
+        {
+          id: 2,
+          image: '/images/reading.png',
+          title: '运动',
+          remark: '一定要每天运动三十分钟',
+          create_time: '2018年2月24日',
+          times: 2,
+          hours: '2.22'
+        }
+      ]
+    }
+
+    components = {
+      listitem: ListItem
+    }
+  }
+</script>
+
+<style lang="less">
+  .wrap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    .swiper {
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      swiper-item {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 60rpx;
+        box-sizing: border-box;
+      }
+    }
+  }
+</style>

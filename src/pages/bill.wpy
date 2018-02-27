@@ -1,0 +1,268 @@
+<template>
+  <view class="wrap">
+    <!-- 顶部统计信息 -->
+    <view class="topinfo" id="topInfo">
+      <view class="calender">
+        <text>{{ calenderArr[0] }}年</text>
+        <picker mode="date" value="{{date}}" fields="month" start="2018-01-01" end="2020-01-01" @change="bindDateChange">
+          <view class="picker">
+            <text class="bold">{{ calenderArr[1] }}</text>
+            <view class="iconfont icon-pulldown"></view>
+          </view>
+        </picker>
+      </view>
+      <view class="income">
+        <text>收入</text>
+        <text class="bold">{{ moneyStat.income }}</text>
+      </view>
+      <view class="pay">
+        <text>支出</text>
+        <text class="bold">{{ moneyStat.pay }}</text>
+      </view>
+    </view>
+
+    <!-- 滚动区域 -->
+    <scroll-view class="scroll-view" scroll-y style="height:{{ scrollHeight }}px">
+      <view class="list-wrap">
+        <repeat for="{{ detailList }}" key="index" index="index" item="item">
+          <listsection :item="item"></listsection>
+        </repeat>
+      </view>
+    </scroll-view>
+
+    <!-- 记一笔 -->
+    <view class="btn-addbill">
+      <text>记</text>
+    </view>
+  </view>
+
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import ListSection from '@/components/bill/listsection'
+  import { log, getSystem, formatTime } from '@/utils/util'
+
+  export default class Bill extends wepy.page {
+    config = {
+      navigationBarTitleText: '账本'
+    }
+
+    data = {
+      calenderArr: ['2018', '02'],   // 当前年月
+      moneyStat: {
+        income: '2000.00',   // 收入
+        pay: '890.00'       // 支出
+      },
+      detailList: [
+        {
+          info: {
+            date: '02月25日',
+            day: '星期日',
+            totalIncome: 0,
+            totalPay: 0
+          },
+          list: [
+            {
+              id: 1,
+              image: '/images/reading.png',
+              title: '餐饮',
+              remark: '',
+              mount: -12
+            },
+            {
+              id: 2,
+              image: '/images/reading.png',
+              title: '兼职',
+              remark: '',
+              mount: 20
+            },
+            {
+              id: 1,
+              image: '/images/reading.png',
+              title: '餐饮',
+              remark: '',
+              mount: -12
+            },
+            {
+              id: 2,
+              image: '/images/reading.png',
+              title: '兼职',
+              remark: '',
+              mount: 20
+            }
+          ]
+        },
+        {
+          info: {
+            date: '02月25日',
+            day: '星期日',
+            totalIncome: 0,
+            totalPay: 0
+          },
+          list: [
+            {
+              id: 1,
+              image: '/images/reading.png',
+              title: '餐饮',
+              remark: '',
+              mount: -12
+            },
+            {
+              id: 2,
+              image: '/images/reading.png',
+              title: '兼职',
+              remark: '',
+              mount: 20
+            }
+          ]
+        },
+        {
+          info: {
+            date: '02月25日',
+            day: '星期日',
+            totalIncome: 0,
+            totalPay: 0
+          },
+          list: [
+            {
+              id: 1,
+              image: '/images/reading.png',
+              title: '餐饮',
+              remark: '',
+              mount: -12
+            },
+            {
+              id: 2,
+              image: '/images/reading.png',
+              title: '兼职',
+              remark: '',
+              mount: 20
+            }
+          ]
+        },
+        {
+          info: {
+            date: '02月25日',
+            day: '星期日',
+            totalIncome: 0,
+            totalPay: 0
+          },
+          list: [
+            {
+              id: 1,
+              image: '/images/reading.png',
+              title: '餐饮',
+              remark: '',
+              mount: -12
+            },
+            {
+              id: 2,
+              image: '/images/reading.png',
+              title: '兼职',
+              remark: '',
+              mount: 20
+            }
+          ]
+        }
+      ],
+      // 滚动区域信息
+      scrollHeight: 0
+    }
+
+    components = {
+      listsection: ListSection
+    }
+
+    methods = {
+      bindDateChange(e) {
+        let dateStr = e.detail.value
+        this.calenderArr = dateStr.split('-')
+        this.$apply()
+
+        // 发送接口请求当前月份的数据
+      }
+    }
+
+    onLoad() {
+      log('账单页面加载成功')
+      const sys = getSystem()
+      wx.createSelectorQuery().select('#topInfo').boundingClientRect((rect) => {
+        let h = rect.height
+        h = h > 0 ? h : 70
+        this.scrollHeight = sys.wh - h
+        this.$apply()
+      }).exec()
+
+      // 设置当前月份
+      const _cdate = formatTime(new Date()).slice(0, 2)
+      this.calenderArr = _cdate
+      this.$apply()
+    }
+  }
+</script>
+
+<style lang="less">
+  .wrap{
+    position: relative;
+    height: 100%;
+  }
+  .topinfo{
+    display: flex;
+    justify-content: space-around;
+    height: 140rpx;
+    padding: 18rpx 0;
+    background-color: #138cff;
+    box-sizing: border-box;
+    z-index: 10;
+    text{
+      text-align: center;
+      display: block;
+      color: #fff;
+    }
+    > view > text:first-child{
+      margin-bottom: 10rpx;
+      font-size: 28rpx;
+    }
+    .bold{
+      font-size: 40rpx;
+      font-weight: bold;
+    }
+  }
+  .picker{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .icon-pulldown::after{
+      font-family: "iconfont" !important;
+      font-size: 32rpx;
+      color: #fff;
+      content: '\e629';
+    }
+  }
+
+  .scroll-view{
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .list-wrap{
+    padding-bottom: 130rpx;
+  }
+
+  .btn-addbill{
+    position: fixed;
+    right: 30rpx;
+    bottom: 15rpx;
+    height: 100rpx;
+    width: 100rpx;
+    line-height: 100rpx;
+    text-align: center;
+    background-color: rgba(19, 140, 255, .9);
+    border-radius: 100%;
+    box-shadow: 0 0 4px 1px rgba(0, 0, 0, 0.15);
+    text{
+      font-size: 26rpx;
+      color: #fff;
+    }
+  }
+</style>

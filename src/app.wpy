@@ -1,0 +1,118 @@
+<style lang="less">
+page{
+  height: 100%;
+  background-color: #f9fbff;
+}
+@font-face {
+  font-family: 'iconfont';  /* project id 573053 */
+  src: url('//at.alicdn.com/t/font_573053_6w688di648xxyldi.eot');
+  src: url('//at.alicdn.com/t/font_573053_6w688di648xxyldi.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_573053_6w688di648xxyldi.woff') format('woff'),
+  url('//at.alicdn.com/t/font_573053_6w688di648xxyldi.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_573053_6w688di648xxyldi.svg#iconfont') format('svg');
+}
+</style>
+
+<script>
+import wepy from 'wepy'
+import 'wepy-async-function'
+
+export default class extends wepy.app {
+  config = {
+    pages: [
+      'pages/plan',
+      'pages/plan/clock',
+      'pages/index',
+      'pages/bill/addone',
+      'pages/bill',
+      'pages/ranking',
+      'pages/me'
+      // 子页面
+    ],
+    window: {
+      backgroundTextStyle: 'light',
+      navigationBarBackgroundColor: '#138cff',
+      navigationBarTitleText: 'WeChat',
+      navigationBarTextStyle: 'white',
+      backgroundColor: '#138cff'
+    },
+    tabBar: {
+      color: '#757982',
+      selectedColor: '#138cff',
+      borderStyle: 'white',
+      backgroundColor: '#fff',
+      list: [
+        {
+          pagePath: 'pages/plan',
+          text: '计划',
+          iconPath: 'images/tabbar/plan.png',
+          selectedIconPath: 'images/tabbar/plan-on.png'
+        },
+        {
+          pagePath: 'pages/bill',
+          text: '账本',
+          iconPath: 'images/tabbar/bill.png',
+          selectedIconPath: 'images/tabbar/bill-on.png'
+        },
+        {
+          pagePath: 'pages/index',
+          text: '圈子',
+          iconPath: 'images/tabbar/index.png',
+          selectedIconPath: 'images/tabbar/index-on.png'
+        },
+        {
+          pagePath: 'pages/ranking',
+          text: '榜单',
+          iconPath: 'images/tabbar/ranking.png',
+          selectedIconPath: 'images/tabbar/ranking-on.png'
+        },
+        {
+          pagePath: 'pages/me',
+          text: '我的',
+          iconPath: 'images/tabbar/me.png',
+          selectedIconPath: 'images/tabbar/me-on.png'
+        }
+      ]
+    }
+  }
+
+  globalData = {
+    userInfo: null
+  }
+
+  constructor () {
+    super()
+    this.use('requestfix')
+  }
+
+  onLaunch() {
+    this.testAsync()
+  }
+
+  sleep (s) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve('promise resolved')
+      }, s * 1000)
+    })
+  }
+
+  async testAsync () {
+    const data = await this.sleep(3)
+    console.log(data)
+  }
+
+  getUserInfo(cb) {
+    const that = this
+    if (this.globalData.userInfo) {
+      return this.globalData.userInfo
+    }
+    wepy.getUserInfo({
+      success (res) {
+        that.globalData.userInfo = res.userInfo
+        cb && cb(res.userInfo)
+      }
+    })
+  }
+}
+</script>

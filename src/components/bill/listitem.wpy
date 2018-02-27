@@ -1,0 +1,46 @@
+<template>
+  <view class="listitem" data-id="{{ obj.id }}">
+    <image src="{{ obj.image }}"></image>
+    <text class="title">{{ obj.title }}</text>
+    <text class="mount">{{ obj.mount }}</text>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  export default class ListItem extends wepy.component {
+    props = {
+      obj: {
+        type: Object,
+        default: {}
+      }
+    }
+
+    methods = {}
+  }
+</script>
+
+<style lang="less">
+  .listitem{
+    display: flex;
+    justify-content: space-between;
+    padding: 16rpx 30rpx 16rpx 0rpx;
+    margin-left: 30rpx;
+    border-bottom: 1rpx solid #f0f0f0;
+    image{
+      margin-right: 20rpx;
+      display: block;
+      width: 60rpx;
+      height: 60rpx;
+      border-radius: 100%;
+    }
+    text{
+      display: block;
+      line-height: 60rpx;
+      font-size: 28rpx;
+    }
+    .title{
+      flex: 1;
+    }
+  }
+</style>

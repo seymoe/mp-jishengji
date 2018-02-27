@@ -1,0 +1,196 @@
+<template>
+  <view class="wrap">
+    <view class="plan-head">
+      <text>计划 {{ planTitle }} {{ totalTime }} 分钟</text>
+    </view>
+
+    <!-- 时钟 -->
+    <view class="clock" wx:if="{{ isStart }}">
+      <text>计时中</text>
+      <text>{{ clock[0] }} : {{ clock[1] }} : {{ clock[2] }}</text>
+    </view>
+    <picker wx:else @change="bindPickerChange" value="{{ index }}" range="{{ minutesArray }}">
+      <view class="clock">
+        <text wx:if="{{ !hadSet }}">点击设置时长 (分钟)</text>
+        <text wx:else>暂停中</text>
+        <text>{{ clock[0] }} : {{ clock[1] }} : {{ clock[2] }}</text>
+      </view>
+    </picker>
+
+    <!-- 底部控制按钮 -->
+    <view class="control-area">
+      <view class="btn-pause" @tap="bindStartOrPause">
+        <text>{{ btnText }}</text>
+      </view>
+      <view class="btn-giveup">
+        <text>放弃</text>
+      </view>
+      <view class="tips">
+        <text>坚持就是胜利</text>
+        <text>放弃意味着放弃本次计划的执行</text>
+        <text>同样也意味着在计划执行过程中的一次“小失败”</text>
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import { getTimeArr, isZero } from '@/utils/util'
+  
+  let timer = null
+
+  export default class Clock extends wepy.page {
+    config = {
+      navigationBarTitleText: '计时器'
+    }
+
+    data = {
+      planId: '',     // 计划ID
+      planTitle: '',  // 计划标题
+      totalTime: 0,    // 计划执行时间（秒）
+      restTime: 0,    // 计划执行剩余的事件（秒）
+      isStart: false, // 本次计划是否开始
+      hadSet: false,  // 记录是否设置过事件
+      btnText: '开始',  // 按钮的文字
+      clock: ['00', '00', '00'],   // 秒表
+      minutesArray: [1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 105, 110, 115, 120]
+    }
+
+    computed = {}
+
+    methods = {
+      // 点击设置时间
+      bindPickerChange(e) {
+        let minutes = this.minutesArray[parseInt(e.detail.value)]
+        let _clock = getTimeArr(new Date().getTime() + minutes * 60 * 1000)
+        this.totalTime = minutes
+        this.restTime = minutes * 60    // 秒
+        this.clock = _clock
+        this.hadSet = true
+        this.$apply()
+      },
+      // 点击开始或暂停
+      bindStartOrPause() {
+        let _isStart = this.isStart
+        if (_isStart && !isZero(this.clock)) {
+          this.isStart = false
+          this.btnText = '继续'
+          // 停止倒计时
+          clearInterval(timer)
+        } else if (!_isStart && !isZero(this.clock)) {
+          this.isStart = true
+          this.btnText = '暂停'
+          // 开始\继续倒计时
+          this.loop(this.restTime, (array) => {
+            let _rest = this.restTime
+            this.restTime = _rest - 1
+            this.clock = array
+            this.$apply()
+          })
+
+          timer = setInterval(() => {
+            this.loop(this.restTime, (array) => {
+              let _rest = this.restTime
+              this.restTime = _rest - 1
+              this.clock = array
+              this.$apply()
+            })
+          }, 1000)
+        } else {
+          this.isStart = false
+          this.btnText = '开始'
+          console.log('请先设置时长')
+        }
+        this.$apply()
+      }
+    }
+
+    // 自定义辅助函数
+    loop(time, cb) {
+      let arr = getTimeArr(new Date().getTime() + time * 1000)
+      cb && cb(arr)
+      if (isZero(arr)) {
+        // 倒计时完成，清除定时器
+        clearInterval(timer)
+        // 重置状态
+        this.isStart = false
+        this.hadSet = false
+        this.btnText = '开始'
+        this.$apply()
+        // 发送post请求发送数据
+      }
+    }
+
+    onLoad(params) {
+      // 没有传递计划ID，页面报错
+      if (!params.planId || !params.planTitle) return
+      this.planId = params.planId
+      this.planTitle = params.planTitle
+      this.$apply()
+    }
+
+    onUnload() {
+      console.log('页面隐藏，清除定时器')
+      // clearInterval(timer)
+    }
+  }
+</script>
+
+<style lang="less">
+  .wrap {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-direction: column;
+    height: 100%;
+    background-color: #fff;
+  }
+  .plan-head text{
+    font-size: 34rpx;
+  }
+  .clock{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 400rpx;
+    height: 400rpx;
+    border-radius: 100%;
+    border: 1rpx solid rgba(19,140,255,.5);
+    text:first-child{
+      font-size: 26rpx;
+      color: #666;
+    }
+    text:last-child{
+      font-size: 50rpx;
+      color: #138cff;
+    }
+  }
+  .control-area{
+    text-align: center;
+    .btn-pause, .btn-giveup{
+      margin: 20rpx auto;
+      width: 140rpx;
+      height: 56rpx;
+      line-height: 56rpx;
+      color: #fff;
+      font-size: 28rpx;
+      border-radius: 4rpx;
+    }
+    .btn-pause{
+      background-color: #138cff;
+    }
+    .btn-giveup{
+      color: #757982;
+    }
+    .tips{
+      margin-top: 40rpx;
+    }
+    .tips text{
+      display: block;
+      font-size: 24rpx;
+      color: #ccc;
+    }
+  }
+</style>
