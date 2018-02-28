@@ -82,7 +82,6 @@
           this.form.cateType = ''
           this.form.cateId = ''
         }
-        this.$apply()
       },
 
       // 选择收入或支出类别

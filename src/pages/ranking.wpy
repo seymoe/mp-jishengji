@@ -1,5 +1,40 @@
 <template>
-  
+  <view class="wrap">
+    <view class="typewrap">
+      <view class="typebar">
+        <view class="{{ rank.typeId === '1' ? 'active' : '' }}" @tap="toggleType(1)">
+          <text>资产排行</text>
+        </view>
+        <view class="{{ rank.typeId === '2' ? 'active' : '' }}" @tap="toggleType(2)">
+          <text>目标排行</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 排行榜滚动区域 -->
+    <view class="rankbox">
+      <scroll-view>
+        <view class="item">
+          <view class="number">1</view>
+          <image src="#"></image>
+          <text class="name">曦莫琅</text>
+          <text class="val">1200币</text>
+        </view>
+        <view class="item">
+          <view class="number">2</view>
+          <image src="#"></image>
+          <text class="name">曦莫琅</text>
+          <text class="val">1100币</text>
+        </view>
+        <view class="item">
+          <view class="number">3</view>
+          <image src="#"></image>
+          <text class="name">曦莫琅</text>
+          <text class="val">100币</text>
+        </view>
+      </scroll-view>
+    </view>
+  </view>
 </template>
 
 <script>
@@ -8,5 +43,84 @@
     config = {
       navigationBarTitleText: '榜单'
     }
+
+    data = {
+      rank: {
+        typeId: '1'
+      }
+    }
+
+    methods = {
+      toggleType(id) {}
+    }
   }
 </script>
+
+<style lang="less">
+  .typewrap{
+    padding: 30rpx 0;
+  }
+  .typebar{
+    display: flex;
+    width: 50%;
+    margin: 0 auto;
+    height: 60rpx;
+    view{
+      width: 50%;
+      line-height: 60rpx;
+      text-align: center;
+      font-size: 28rpx;
+      background-color: #fff;
+      transition: background-color .3s;
+      box-sizing: border-box;
+      border: 2rpx solid #138cff;
+      text{
+        color: #138cff;
+      }
+    }
+    view:first-child{
+      border-top-left-radius: 6rpx;
+      border-bottom-left-radius: 6rpx;
+    }
+    view:last-child{
+      border-top-right-radius: 6rpx;
+      border-bottom-right-radius: 6rpx;
+    }
+    .active{
+      background-color: #138cff;
+      text{
+        color: #fff;
+      }
+    }
+  }
+
+  .rankbox{
+    padding: 0 30rpx;
+  }
+
+  .rankbox .item{
+    display: flex;
+    padding: 10rpx;
+    height: 60rpx;
+    border-bottom: 1rpx solid #f3f3f3;
+    text{
+      font-size: 28rpx;
+      line-height: 60rpx;
+    }
+    .number{
+      width: 100rpx;
+      text-align: center;
+    }
+    image{
+      display: block;
+      width: 60rpx;
+      height: 60rpx;
+    }
+    .name{
+      flex: 1;
+    }
+    .val{
+      padding: 0 20rpx;
+    }
+  }
+</style>

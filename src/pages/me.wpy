@@ -48,7 +48,7 @@
       </view>
       <view class="menuitem">
         <view class="icon iconfont icon-author"></view>
-        <text>关于作者</text>
+        <text>关于</text>
       </view>
     </view>
   </view>
