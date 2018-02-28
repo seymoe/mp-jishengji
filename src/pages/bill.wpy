@@ -31,7 +31,7 @@
     </scroll-view>
 
     <!-- 记一笔 -->
-    <view class="btn-addbill">
+    <view class="btn-addbill" @tap="bindToAddpage">
       <text>记</text>
     </view>
   </view>
@@ -175,12 +175,18 @@
     }
 
     methods = {
+      // 选择日期
       bindDateChange(e) {
         let dateStr = e.detail.value
         this.calenderArr = dateStr.split('-')
         this.$apply()
 
         // 发送接口请求当前月份的数据
+      },
+
+      // 跳转到记账页面
+      bindToAddpage() {
+        this.$navigate('./bill/addone')
       }
     }
 

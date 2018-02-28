@@ -2,19 +2,40 @@
   <view class="wrap">
     <view class="typewrap">
       <view class="typebar">
-        <view class="{{ bill.typeId == 1 ? 'active' : '' }}" @tap="toggleType(1)">
+        <view class="{{ bill.typeId === '1' ? 'active' : '' }}" @tap="toggleType(1)">
           <text>支出</text>
         </view>
-        <view class="{{ bill.typeId == 2 ? 'active' : '' }}" @tap="toggleType(2)">
+        <view class="{{ bill.typeId === '2' ? 'active' : '' }}" @tap="toggleType(2)">
           <text>收入</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 输入框区域 -->
+    <view class="input-area">
+      <view class="money">
+        <input type="digit" placeholder="￥" confirm-type="done" @input="bindInputMoney" @blur="bindBlurMoney"/>
+      </view>
+      <view class="remark">
+        <input type="text" placeholder="备注信息:" />
+      </view>
+      <view class="btns-wrap">
+        <view class="btn-confirm" @tap="confirmAdd">
+          <text>确定</text>
+        </view>
+        <view class="btn-cancel" @tap="bindToBillpage">
+          <text>取消</text>
         </view>
       </view>
     </view>
 
     <!-- 类别图标列表 -->
     <view class="catewrap">
-      <cateslide :list="cateList"></cateslide>
+      <cateslide
+        :list.sync="cateList"
+        @selectCate.user="chooseCate"></cateslide>
     </view>
+
   </view>
 
 </template>
@@ -22,7 +43,8 @@
 <script>
   import wepy from 'wepy'
   import CateSlide from '@/components/bill/cateslide'
-  // import { log, getSystem, formatTime } from '@/utils/util'
+  import { log } from '@/utils/util'
+  import { payCateList, incomeCateList } from '@/utils/config'
 
   export default class AddOne extends wepy.page {
     config = {
@@ -30,20 +52,15 @@
     }
 
     data = {
-      cateList: [
-        {
-          cateId: 1,
-          catelabel: 'catering',
-          cateName: '餐饮'
-        },
-        {
-          cateId: 2,
-          catelabel: 'shopping',
-          cateName: '购物'
-        }
-      ],
+      cateList: payCateList,
       bill: {
-        typeId: 1
+        typeId: '1'
+      },
+      form: {
+        cateType: '',
+        cateId: '',
+        money: 0,
+        remark: ''
       }
     }
 
@@ -52,9 +69,78 @@
     }
 
     methods = {
+      // 切换记账方式
       toggleType(t) {
-        this.bill.typeId = t
+        if (t === '1' && this.bill.typeId === '2') {
+          this.bill.typeId = t
+          this.cateList = payCateList
+          this.form.cateType = ''
+          this.form.cateId = ''
+        } else if (t === '2' && this.bill.typeId === '1') {
+          this.bill.typeId = t
+          this.cateList = incomeCateList
+          this.form.cateType = ''
+          this.form.cateId = ''
+        }
         this.$apply()
+      },
+
+      // 选择收入或支出类别
+      chooseCate(type, id) {
+        log('type', type)
+        log('id', id)
+        this.form.cateType = type
+        this.form.cateId = id
+      },
+
+      // 输入金额变化得到值
+      bindInputMoney(e) {
+        let val = e.detail.value
+        if (val.indexOf('￥') === 0) {
+          return '￥' + val.slice(1)
+        } else if (val === '') {
+          return ''
+        }
+        return '￥' + val
+      },
+
+      bindBlurMoney(e) {
+        let val = e.detail.value
+        if (val.indexOf('￥') === 0) {
+          val = parseFloat(val.slice(1))
+        } else {
+          val = 0
+        }
+        this.form.money = val
+      },
+
+      bindBlurRemark(e) {
+        let val = e.detail.value.trim()
+        if (val !== '') {
+          val = val.replace(/<\/?[^>]*>/g, '')
+        }
+        this.form.remark = val
+      },
+
+      // 确认记账
+      confirmAdd() {
+        let { money } = this.form
+        if (money <= 0) {
+          // 提示金额不能为0
+          wx.showToast({
+            title: this.bill.typeId === '1' ? '没花钱不能记哦' : '没收钱不能记哦',
+            icon: 'success',
+            duration: 2000
+          })
+          return false
+        }
+
+        // 发送Post请求记录
+      },
+
+      // 取消 返回账本页
+      bindToBillpage() {
+        this.$switch('../bill')
       }
     }
 
@@ -82,9 +168,6 @@
     width: 50%;
     margin: 0 auto;
     height: 60rpx;
-    border-radius: 6rpx;
-    border: 1rpx solid #138cff;
-    box-sizing: border-box;
     view{
       width: 50%;
       line-height: 60rpx;
@@ -92,6 +175,8 @@
       font-size: 28rpx;
       background-color: #fff;
       transition: background-color .3s;
+      box-sizing: border-box;
+      border: 2rpx solid #138cff;
       text{
         color: #138cff;
       }
@@ -110,5 +195,52 @@
         color: #fff;
       }
     }
+  }
+  .input-area{
+    padding: 0 50rpx;
+    margin-bottom: 30rpx;
+    border-bottom: 6rpx solid #138cff;
+  }
+  .money{
+    padding-bottom: 6rpx;
+    border-bottom: 1rpx solid #f3f3f3;
+    input{
+      height: 120rpx;
+      line-height: 120rpx;
+      font-size: 70rpx;
+    }
+  }
+  .remark{
+    padding-bottom: 6rpx;
+    border-bottom: 1rpx solid #f3f3f3;
+    input{
+      height: 70rpx;
+      line-height: 70rpx;
+      font-size: 30rpx;
+    }
+  }
+
+  .btns-wrap{
+    display: flex;
+  }
+
+  .btn-confirm, .btn-cancel{
+    margin: 30rpx 0;
+    width: 150rpx;
+    height: 60rpx;
+    line-height: 60rpx;
+    text-align: center;
+    border-radius: 4rpx;
+    text{
+      font-size: 26rpx;
+    }
+  }
+  .btn-confirm{
+    margin-right: 30rpx;
+    background-color: #138cff;
+    color: #fff;
+  }
+  .btn-cancel{
+    background-color: #f8f8f8;
   }
 </style>

@@ -1,16 +1,15 @@
 <template>
-  <swiper indicator-dots="true">
-    <swiper-item>
-      <view class="box">
-        <repeat for="{{ list }}" key="index" index="index" item="item">
-          <view class="item">
-            <view class="icon icon-{{ item.catelabel }}"></view>
-            <text>{{ item.cateName }}</text>
-          </view>
-        </repeat>
-      </view>
-    </swiper-item>
-  </swiper>
+  <scroll-view class="scrollbox" scroll-y>
+    <view class="box">
+      <repeat for="{{ list }}" key="index" index="index" item="item">
+        <view class="item {{ cateType == item.type && cateId == item.cateId ? 'active' : '' }}"
+          @tap="selectCate({{item.type}}, {{item.cateId}})">
+          <view class="icon icon-{{ item.type }}-{{ item.cateId }}"></view>
+          <text>{{ item.cateName }}</text>
+        </view>
+      </repeat>
+    </view>
+  </scroll-view>
 </template>
 
 <script>
@@ -22,42 +21,77 @@
         default: []
       }
     }
+
+    data = {
+      cateType: '',
+      cateId: ''
+    }
+
+    methods = {
+      selectCate(type, id) {
+        if (!type || !id) {
+          console.error('未能获取到类别信息')
+          return
+        }
+        this.cateType = type
+        this.cateId = id
+        this.$emit('selectCate', type, id)
+      }
+    }
   }
 </script>
 
 <style lang="less">
+  .scrollbox{
+    height: 640rpx;
+  }
   .box{
     display: flex;
     justify-content: flex-start;
     flex-wrap: wrap;
     box-sizing: border-box;
-    padding: 30rpx;
+    padding: 0 30rpx;
     .item{
+      height: 130rpx;
+      padding-bottom: 20rpx;
       display: flex;
       flex-direction: column;
       justify-content: center;
-      width: 10%;
+      width: 16.66%;
       text-align: center;
+      box-sizing: border-box;
       text{
         font-size: 24rpx;
         color: #333;
       }
     }
+    .active{
+      .icon{
+        background-color: #138cff;
+      }
+      .icon::after{
+        color: #fff;
+      }
+      text{
+        color: #138cff;
+      }
+    }
   }
   .icon{
     margin: 0 auto 8rpx auto;
-    width: 50rpx;
-    height: 50rpx;
+    width: 70rpx;
+    height: 70rpx;
     border-radius: 100%;
     background-color: #f8f8f8;
   }
   .icon::after{
     font-family: "iconfont" !important;
-    font-size: 36rpx;
-    line-height: 50rpx;
-  }
-  .icon-catering::after{
-    content: '\e600';
+    font-size: 38rpx;
+    line-height:70rpx;
     color: #333;
+  }
+  
+  .icon-pay-1::after{
+    content: '\e600';
   }
 </style>
