@@ -14,24 +14,14 @@
     <!-- 排行榜滚动区域 -->
     <view class="rankbox">
       <scroll-view>
-        <view class="item">
-          <view class="number">1</view>
-          <image src="#"></image>
-          <text class="name">曦莫琅</text>
-          <text class="val">1200币</text>
-        </view>
-        <view class="item">
-          <view class="number">2</view>
-          <image src="#"></image>
-          <text class="name">曦莫琅</text>
-          <text class="val">1100币</text>
-        </view>
-        <view class="item">
-          <view class="number">3</view>
-          <image src="#"></image>
-          <text class="name">曦莫琅</text>
-          <text class="val">100币</text>
-        </view>
+        <repeat for="{{ rankList }}" key="index" index="index" item="item">
+          <view class="item" data-id="{{ item.id }}">
+            <view class="number">{{ index + 1 }}</view>
+            <image src="{{ item.image }}"></image>
+            <text class="name">{{ item.name }}</text>
+            <text class="val">{{ item.val }}</text>
+          </view>
+        </repeat>
       </scroll-view>
     </view>
   </view>
@@ -45,13 +35,45 @@
     }
 
     data = {
+      rankList: [
+        {
+          id: 1,
+          image: '/images/reading.png',
+          name: '曦莫琅',
+          val: '100币'
+        },
+        {
+          id: 2,
+          image: '/images/reading.png',
+          name: '曦莫琅',
+          val: '100币'
+        },
+        {
+          id: 3,
+          image: '/images/reading.png',
+          name: '曦莫琅',
+          val: '100币'
+        },
+        {
+          id: 4,
+          image: '/images/reading.png',
+          name: '曦莫琅',
+          val: '100币'
+        }
+      ],
       rank: {
         typeId: '1'
       }
     }
 
     methods = {
-      toggleType(id) {}
+      toggleType(t) {
+        if (t === '1' && this.rank.typeId === '2') {
+          this.rank.typeId = t
+        } else if (t === '2' && this.rank.typeId === '1') {
+          this.rank.typeId = t
+        }
+      }
     }
   }
 </script>
@@ -113,6 +135,7 @@
     }
     image{
       display: block;
+      margin-right: 30rpx;
       width: 60rpx;
       height: 60rpx;
     }
