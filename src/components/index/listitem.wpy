@@ -1,0 +1,115 @@
+<template>
+  <view class="list-item">
+    <view class="header">
+      <view class="left">
+        <image src="{{ avatar }}"></image>
+        <text>{{ username }}</text>
+      </view>
+    </view>
+    <view class="main">
+      <text class="">{{ content }}</text>
+      <image wx:if="{{ image }}" src="{{ image }}"></image>
+    </view>
+    <view class="footer">
+      <view class="like">{{ likes }} 赞</view>
+      <view class="right">
+        <text>{{ createtime }}</text>
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  export default class ListItem extends wepy.component {
+    props = {
+      id: {
+        type: Number,
+        default: 0
+      },
+      image: {
+        type: String,
+        default: ''
+      },
+      content: {
+        type: String,
+        default: ''
+      },
+      username: {
+        type: String,
+        default: ''
+      },
+      createtime: {
+        type: String,
+        default: ''
+      },
+      likes: {
+        type: Number,
+        default: 0
+      },
+      avatar: {
+        type: String,
+        default: ''
+      }
+    }
+
+    methods = {
+      bindDoPlan(id, title) {
+        if (!id || !title) return
+
+        // 跳转至计时器界面
+        this.$parent.$navigate('./plan/clock', { planId: id, planTitle: title })
+      }
+    }
+  }
+</script>
+
+<style lang="less">
+  .list-item{
+    padding: 0 30rpx;
+    margin-bottom: 20rpx;
+    background-color: #fff;
+    .header{
+      display: flex;
+      justify-content: space-between;
+      font-size: 26rpx;
+      color: #666;
+      border-bottom: 1rpx solid #f3f3f3;
+      .left{
+        display: flex;
+        image, text{
+          display: block;
+          height: 60rpx;
+          line-height: 60rpx;
+        }
+        image{
+          margin: 10rpx 20rpx 10rpx 0;
+          height: 40rpx;
+          width: 40rpx;
+          border-radius: 100%;
+        }
+      }
+    }
+    .main{
+      text{
+        font-weight: bold;
+        font-size: 28rpx;
+        color: #000;
+      }
+      image{
+        display: block;
+        width: 100%;
+      }
+    }
+    .footer{
+      display: flex;
+      justify-content: space-between;
+      font-size: 26rpx;
+      color: #666;
+      .like{
+        height: 50rpx;
+        line-height: 50rpx;
+      }
+    }
+  }
+</style>

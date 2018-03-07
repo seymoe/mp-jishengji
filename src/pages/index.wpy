@@ -1,22 +1,5 @@
-<style lang="less">
-  .userinfo {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .userinfo-avatar {
-    width: 80rpx;
-    height: 80rpx;
-    border-radius: 50%;
-  }
-
-  .userinfo-nickname {
-    color: #aaa;
-  }
-</style>
 <template>
-  <view class="container">
+  <!-- <view class="container">
     <view class="userinfo" @tap="handleViewTap">
       <image class="userinfo-avatar" src="{{ userInfo.avatarUrl }}" background-size="cover"/>
       <view class="userinfo-nickname">{{ userInfo.nickName }}</view>
@@ -74,6 +57,19 @@
     </panel>
 
     <toast />
+  </view> -->
+  <view class="wrap">
+    <repeat for="{{ dynamicList }}" key="index" index="index" item="item">
+      <listitem
+        :id="item.id"
+        :image="item.image"
+        :content="item.content"
+        :avatar="item.avatar"
+        :createtime="item.create_time"
+        :username="item.username"
+        :likes="item.likes">
+      </listitem>
+    </repeat>
   </view>
 </template>
 
@@ -87,6 +83,8 @@
   import Toast from 'wepy-com-toast'
   import testMixin from '../mixins/test'
 
+  import ListItem from '@/components/index/listitem'
+
   console.log('moduleA ignored: ', moduleA) // => moduleA ignored: {}
 
   export default class Index extends wepy.page {
@@ -99,12 +97,52 @@
       counter2: Counter,
       list: List,
       group: Group,
-      toast: Toast
+      toast: Toast,
+      listitem: ListItem
     }
 
     mixins = [testMixin]
 
     data = {
+      dynamicList: [
+        {
+          id: 1,
+          username: '曦莫琅',
+          avatar: '/images/reading.png',
+          content: '这是动态',
+          image: '',
+          create_time: '2018-02-23 17:31',
+          likes: 12
+        },
+        {
+          id: 2,
+          username: '曦莫琅',
+          avatar: '/images/reading.png',
+          content: '这是动态',
+          image: '',
+          create_time: '2018-02-23 17:31',
+          likes: 12
+        },
+        {
+          id: 3,
+          username: '曦莫琅',
+          avatar: '/images/reading.png',
+          content: '这是动态',
+          image: '/images/reading.png',
+          create_time: '2018-02-23 17:31',
+          likes: 123
+        },
+        {
+          id: 4,
+          username: '曦莫琅',
+          avatar: '/images/reading.png',
+          content: '这是动态',
+          image: '',
+          create_time: '2018-02-23 17:31',
+          likes: 12
+        }
+      ],
+
       mynum: 20,
       userInfo: {
         nickName: '加载中...'
@@ -236,3 +274,24 @@
     }
   }
 </script>
+
+<style lang="less">
+  .wrap{
+    background-color: #f8f8f8;
+  }
+  .userinfo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .userinfo-avatar {
+    width: 80rpx;
+    height: 80rpx;
+    border-radius: 50%;
+  }
+
+  .userinfo-nickname {
+    color: #aaa;
+  }
+</style>
