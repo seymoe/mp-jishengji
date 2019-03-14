@@ -6,7 +6,7 @@
 
 ## 玩耍：
 
-1. Fork 或 `git clone https://github.com/ximolang/mp-jishengji.git` 或 download
+1. Fork 或 `git clone https://github.com/seymoe/mp-jishengji.git` 或 download
 2. `cd mp-jishengji && npm install`
 3. `wepy build --watch` (如果未安装wepy-cli,请先安装,见[WePY](https://tencent.github.io/wepy/index.html))
 4. 微信开发者工具目录选择dist
